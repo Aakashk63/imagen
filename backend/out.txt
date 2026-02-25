@@ -1,0 +1,148 @@
+﻿.\venv\Scripts\python : 
+WARNING[XFORMERS]: xFormers 
+can't load C++/CUDA 
+extensions. xFormers was 
+built for:
+At line:1 char:1
++ .\venv\Scripts\python 
+main.py 2>&1 | Out-File 
+-Encoding utf8 out.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~
+    + CategoryInfo           
+   : NotSpecified: (WARNING  
+  [XFORMER... was built fo   
+ r::String) [], RemoteExc    
+eption
+    + FullyQualifiedErrorId  
+   : NativeCommandError
+ 
+    PyTorch 2.10.0+cu128 
+with CUDA 1208 (you have 
+2.10.0+cpu)
+    Python  3.10.11 (you 
+have 3.13.5)
+  Please reinstall xformers 
+(see https://github.com/faceb
+ookresearch/xformers#installi
+ng-xformers)
+  Memory-efficient 
+attention, SwiGLU, sparse 
+and more won't be available.
+  Set 
+XFORMERS_MORE_DETAILS=1 for 
+more details
+D:\New folder\backend\venv\Li
+b\site-packages\diffusers\mod
+els\transformers\transformer_
+kandinsky.py:168: 
+UserWarning: CUDA is not 
+available or torch_xla is 
+imported. Disabling autocast.
+  @torch.autocast(device_type
+="cuda", dtype=torch.float32)
+D:\New folder\backend\venv\Li
+b\site-packages\diffusers\mod
+els\transformers\transformer_
+kandinsky.py:272: 
+UserWarning: CUDA is not 
+available or torch_xla is 
+imported. Disabling autocast.
+  @torch.autocast(device_type
+="cuda", dtype=torch.float32)
+Loading 'Lykon/dreamshaper-8' on cpu...
+
+Loading pipeline 
+components...:   0%|         
+ | 0/6 [00:00<?, 
+?it/s]CLIPFeatureExtractor 
+appears to have been 
+deprecated in transformers. 
+Using CLIPImageProcessor 
+instead.
+
+Loading pipeline 
+components...:  50%|#####    
+ | 3/6 [00:00<00:00, 
+22.83it/s]`torch_dtype` is 
+deprecated! Use `dtype` 
+instead!
+
+Loading pipeline 
+components...: 
+100%|##########| 6/6 
+[00:00<00:00,  9.78it/s]
+Loading pipeline 
+components...: 
+100%|##########| 6/6 
+[00:00<00:00, 10.69it/s]
+You have disabled the safety 
+checker for <class 'diffusers
+.pipelines.stable_diffusion.p
+ipeline_stable_diffusion.Stab
+leDiffusionPipeline'> by 
+passing 
+`safety_checker=None`. 
+Ensure that you abide to the 
+conditions of the Stable 
+Diffusion license and do not 
+expose unfiltered results in 
+services or applications 
+open to the public. Both the 
+diffusers team and Hugging 
+Face strongly recommend to 
+keep the safety filter 
+enabled in all public facing 
+circumstances, disabling it 
+only for use-cases that 
+involve analyzing network 
+behavior or auditing its 
+results. For more 
+information, please have a 
+look at https://github.com/hu
+ggingface/diffusers/pull/254 
+.
+Traceback (most recent call 
+last):
+  File "D:\New 
+folder\backend\main.py", 
+line 35, in <module>
+    pipe.scheduler = DPMSolve
+rMultistepScheduler.from_conf
+ig(pipe.scheduler.config)
+                     ~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\New folder\backend
+\venv\Lib\site-packages\diffu
+sers\configuration_utils.py",
+ line 265, in from_config
+    model = cls(**init_dict)
+  File "D:\New folder\backend
+\venv\Lib\site-packages\diffu
+sers\configuration_utils.py",
+ line 699, in inner_init
+    init(self, *args, 
+**init_kwargs)
+    ~~~~^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^
+  File "D:\New folder\backend
+\venv\Lib\site-packages\diffu
+sers\schedulers\scheduling_dp
+msolver_multistep.py", line 
+296, in __init__
+    raise ValueError(
+        
+f"`final_sigmas_type` 
+{final_sigmas_type} is not 
+supported for 
+`algorithm_type` 
+{algorithm_type}. Please 
+choose `sigma_min` instead."
+    )
+ValueError: 
+`final_sigmas_type` zero is 
+not supported for 
+`algorithm_type` deis. 
+Please choose `sigma_min` 
+instead.
