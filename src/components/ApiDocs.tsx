@@ -6,9 +6,7 @@ export function ApiDocs() {
     const [copiedPost, setCopiedPost] = useState(false);
     const [copiedGet, setCopiedGet] = useState(false);
 
-    const apiUrl = typeof window !== 'undefined'
-        ? (window.location.hostname.includes('vercel.app') ? 'http://localhost:8000' : `http://${window.location.hostname}:8000`)
-        : 'http://localhost:8000';
+    const apiUrl = import.meta.env.VITE_BACKEND_API_URL || '[YOUR_BACKEND_API_URL]';
 
     const postCode = `curl -X POST "${apiUrl}/generate" \\
   -H "Content-Type: application/json" \\

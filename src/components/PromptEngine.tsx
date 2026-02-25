@@ -12,17 +12,19 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
   const [history, setHistory] = useState<string[]>([]);
 
   const getApiBaseUrl = () => {
-    const host = window.location.hostname;
-    // If deployed on Vercel, the local backend is still at localhost
-    if (host.includes('vercel.app')) {
-      return 'http://localhost:8000';
-    }
-    return `http://${host}:8000`;
+    // Strictly use environment variables for backend URL matching static hosting requirements
+    return import.meta.env.VITE_BACKEND_API_URL;
   };
 
   const fetchHistory = async () => {
+    const baseUrl = getApiBaseUrl();
+    if (!baseUrl) {
+      console.warn("AI backend not connected. Please configure BACKEND_API_URL.");
+      return;
+    }
+
     try {
-      const response = await fetch(`${getApiBaseUrl()}/history`);
+      const response = await fetch(`${baseUrl}/history`);
       if (response.ok) {
         const data = await response.json();
         setHistory(data.history || []);
@@ -39,10 +41,16 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
   const generateImage = async () => {
     if (!subject) return;
 
+    const baseUrl = getApiBaseUrl();
+    if (!baseUrl) {
+      alert("AI backend not connected. Please configure BACKEND_API_URL.");
+      return;
+    }
+
     setIsGenerating(true);
 
     try {
-      const response = await fetch(`${getApiBaseUrl()}/generate`, {
+      const response = await fetch(`${baseUrl}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -61,7 +69,7 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
       fetchHistory();
     } catch (error) {
       console.error(error);
-      alert(`Failed to connect to the local Python AI. Please ensure the Python backend is running at ${getApiBaseUrl()}`);
+      alert(`AI backend not connected. Please configure BACKEND_API_URL.`);
     } finally {
       setIsGenerating(false);
     }
