@@ -11,10 +11,18 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
 
+  const getApiBaseUrl = () => {
+    const host = window.location.hostname;
+    // If deployed on Vercel, the local backend is still at localhost
+    if (host.includes('vercel.app')) {
+      return 'http://localhost:8000';
+    }
+    return `http://${host}:8000`;
+  };
+
   const fetchHistory = async () => {
     try {
-      const currentHost = window.location.hostname;
-      const response = await fetch(`http://${currentHost}:8000/history`);
+      const response = await fetch(`${getApiBaseUrl()}/history`);
       if (response.ok) {
         const data = await response.json();
         setHistory(data.history || []);
@@ -34,9 +42,7 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
     setIsGenerating(true);
 
     try {
-      // Dynamically get the current IP/Hostname so it works on other network devices (like your phone!)
-      const currentHost = window.location.hostname;
-      const response = await fetch(`http://${currentHost}:8000/generate`, {
+      const response = await fetch(`${getApiBaseUrl()}/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -55,7 +61,7 @@ export const PromptEngine: React.FC<PromptEngineProps> = () => {
       fetchHistory();
     } catch (error) {
       console.error(error);
-      alert(`Failed to connect to the local Python AI. Please ensure the Python backend is running at http://${window.location.hostname}:8000`);
+      alert(`Failed to connect to the local Python AI. Please ensure the Python backend is running at ${getApiBaseUrl()}`);
     } finally {
       setIsGenerating(false);
     }
