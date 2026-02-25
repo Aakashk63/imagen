@@ -49,6 +49,14 @@ if device == "cuda":
 else:
     pipe.to(device)
 
+lora_path = "sd-model-finetuned-lora"
+if os.path.exists(lora_path):
+    try:
+        print(f"Applying custom trained LoRA weights from {lora_path}...")
+        pipe.load_lora_weights(lora_path)
+    except Exception as e:
+        print(f"Failed to load LoRA: {e}")
+
 # COMPEL SETUP: This allows us to use parenthesis weighting like "(red blazer)++"
 compel_proc = Compel(tokenizer=pipe.tokenizer, text_encoder=pipe.text_encoder)
 
@@ -65,13 +73,20 @@ def process_generation_request(prompt: str, negative_prompt: str, request: Reque
     prompt_embeds = compel_proc(prompt)
     negative_embeds = compel_proc(negative_prompt) if negative_prompt else None
     
+    # Explicitly use a random generator so every output is completely unique
+    import random
+    seed = random.randint(0, 2147483647)
+    print(f"Using random seed: {seed}")
+    generator = torch.Generator(device=device).manual_seed(seed)
+    
     # Pass the embedded prompt instead of the raw string!
     # DPMSolver gets amazing results in just 20 steps, reducing time even more!
     image = pipe(
         prompt_embeds=prompt_embeds,
         negative_prompt_embeds=negative_embeds, 
         num_inference_steps=20,
-        guidance_scale=7.5
+        guidance_scale=7.5,
+        generator=generator
     ).images[0]
     
     # Save image to disk

@@ -6,11 +6,15 @@ export function ApiDocs() {
     const [copiedPost, setCopiedPost] = useState(false);
     const [copiedGet, setCopiedGet] = useState(false);
 
-    const postCode = `curl -X POST "http://localhost:8000/generate" \\
+    const apiUrl = typeof window !== 'undefined'
+        ? (window.location.hostname.includes('vercel.app') ? 'http://localhost:8000' : `http://${window.location.hostname}:8000`)
+        : 'http://localhost:8000';
+
+    const postCode = `curl -X POST "${apiUrl}/generate" \\
   -H "Content-Type: application/json" \\
   -d '{"prompt": "A futuristic city in the clouds, cyberpunk style", "negative_prompt": "blurry, low quality"}'`;
 
-    const getCode = `curl -G "http://localhost:8000/generate" \\
+    const getCode = `curl -G "${apiUrl}/generate" \\
   --data-urlencode "prompt=A futuristic city in the clouds, cyberpunk style" \\
   --data-urlencode "negative_prompt=blurry, low quality"`;
 
@@ -45,7 +49,7 @@ export function ApiDocs() {
 
             <p className="text-starlight/70 mb-8 relative z-10 text-lg">
                 Integrate Imagen into your custom workflows (like n8n, Make.com, or custom scripts).
-                The local AI server runs on <code className="bg-white/10 px-2 py-1 rounded text-nano font-mono text-sm">http://localhost:8000</code> and can serve images via POST and GET requests.
+                The local AI server runs on <code className="bg-white/10 px-2 py-1 rounded text-nano font-mono text-sm">{apiUrl}</code> and can serve images via POST and GET requests.
             </p>
 
             <div className="grid md:grid-cols-2 gap-8 relative z-10">
@@ -99,7 +103,7 @@ export function ApiDocs() {
                 <p className="text-sm text-starlight/70 mb-3">Both methods respond perfectly formatted to be displayed directly in image tags or consumed by API clients.</p>
                 <pre className="p-3 rounded-lg bg-void/50 text-xs font-mono text-starlight/60 border border-white/5">
                     {`{
-  "image": "http://localhost:8000/outputs/8f106f36-1e64-4e2a-b732-c651f472856f.png"
+  "image": "${apiUrl}/outputs/8f106f36-1e64-4e2a-b732-c651f472856f.png"
 }`}
                 </pre>
             </div>
